@@ -1,22 +1,25 @@
 import { Button, Form } from "react-bootstrap";
 import ListaTareas from "./ListaTareas";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const FormularioTareas = () => {
     const [nombreTarea, setNombreTarea] = useState("");
-    const [tareas, setTareas] = useState([])
+    const [tareas, setTareas] = useState(
+      JSON.parse(localStorage.getItem("listaTareasKey")) || []
+    );
+
+    useEffect(() => {
+      localStorage.setItem("listaTareasKey", JSON.stringify(tareas));
+    }, [tareas]);
 
     const handleSubmit = (e)=>{
-        e.preventDefault();
-      // tareas.push(nombreTarea)
-      setTareas([...tareas, nombreTarea]); //operador spread
-      //limpiar el input
+      e.preventDefault();
+      setTareas([...tareas, nombreTarea]);
       setNombreTarea('');
       }
       
       const borrarTarea = (nombre)=>{
         const tareasActualizadas = tareas.filter((itemTarea)=> itemTarea !== nombre )
-        // actualizar el state tareas
         setTareas(tareasActualizadas);
       }
 
